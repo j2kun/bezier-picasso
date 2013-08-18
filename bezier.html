@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Bezier and Picasso</title>
+
+   <style type="text/css"> 
+      #main {width: 800px;}
+      canvas {border: 1px solid black; margin: 20px;}
+      .center {margin-left: auto; margin-right: auto; text-align: center}
+      .hidden {display: none;}
+   </style>
+	<script type="text/javascript" src="bezier-draw.js"></script>
+	<script type="text/javascript" src="bezier-search.js"></script>
+
+</head>
+
+<body onload="init();">
+   <img class="hidden" id="dog" src="dog.jpg" />
+   <div id="main" class="center">
+      <h1 class="center">Bezier and Picasso</h1>
+
+      <div class="center">
+         <canvas id="left" width="300", height="300"></canvas>
+         <canvas id="right" width="300", height="300"></canvas>
+      </div>
+   </div>
+
+</body>
+</html>

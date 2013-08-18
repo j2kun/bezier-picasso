@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Drawing Bezier Curves</title>
+
+   <!-- Tangle -->
+   <script type="text/javascript" src="Tangle.js"></script>
+
+   <!-- TangleKit (optional) -->
+   <link rel="stylesheet" href="TangleKit/TangleKit.css" type="text/css">
+   <script type="text/javascript" src="TangleKit/mootools.js"></script>
+   <script type="text/javascript" src="TangleKit/sprintf.js"></script>
+   <script type="text/javascript" src="TangleKit/BVTouchable.js"></script>
+   <script type="text/javascript" src="TangleKit/TangleKit.js"></script>
+
+   <style type="text/css">
+      canvas {border: 1px solid black; margin: 20px;}
+      .center {margin-left: auto; margin-right: auto; text-align: center}
+      .hidden {display: none;}
+      table { border-collapse:collapse; margin-left: auto; margin-right: auto; }
+      table, th, td { border: 1px solid black; }
+      td, th { vertical-align:center; padding: 5px;}
+   </style>
+	<script type="text/javascript" src="bezier-draw.js"></script>
+	<script type="text/javascript" src="bezier-tutorial.js"></script>
+
+</head>
+
+<body onload="init();">
+   <img class="hidden" id="dog" src="dog.jpg" />
+   <div id="main" class="center">
+      <h1 class="center">Drawing Bezier Curves</h1>
+
+      <div class="center">
+         <canvas id="canvas" width="2592", height="1000"></canvas>
+         <table><tr>
+                  <th>Curve</th>
+                  <th>P0 x</th>
+                  <th>P0 y</th>
+                  <th>P1 x</th>
+                  <th>P1 y</th>
+                  <th>P2 x</th>
+                  <th>P2 y</th>
+                  <th>P3 x</th>
+                  <th>P3 y</th>
+                </tr> 
+            <tr>
+                  <td>Front Leg</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="front3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Tummy</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tummy3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Back Leg </td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="backleg3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Tail</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="tail3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Back</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="back3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Ear start </td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earstart3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Ear finish + head</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="earfinish3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Nose</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="nose3y"></span></td>
+            </tr>
+            <tr>
+                  <td>Mouth</td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth0x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth0y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth1x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth1y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth2x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth2y"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth3x"></span></td>
+                  <td><span class="TKAdjustableNumber" data-min="0" data-max="3000" data-var="mouth3y"></span></td>
+            </tr>
+         </table>
+      </div>
+   </div>
+
+</body>
+</html>
